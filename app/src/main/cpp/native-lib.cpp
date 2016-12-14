@@ -1,8 +1,9 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
+#include "stddef.h"
 
-#define TAG "demo-jni" // 这个是自定义的LOG的标识
+#define TAG "sign-jni" // 这个是自定义的LOG的标识
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG ,__VA_ARGS__) // 定义LOGD类型
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,TAG ,__VA_ARGS__) // 定义LOGI类型
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN,TAG ,__VA_ARGS__) // 定义LOGW类型
@@ -116,25 +117,13 @@ Java_sharpandroid_com_android_1sign_1safe_verifycertificate_PackageChecker_check
         LOGE("验证通过");
         is_valid= true;
     } else{
-        //ThrowException(env,"java/io/RuntimeException","验证失败");
+        //如果失败，扔出一个异常好了
+        jclass error_class = env->FindClass("java/lang/Exception");
+        (env)->ThrowNew(error_class,"验证失败！");
+        env->DeleteLocalRef(message_digest_class);
     }
     return ;
 }
 
-JNIEXPORT void JNICALL ThrowException(JNIEnv *env,const char * className,const char * message)
-{
-    jclass objClass = env->FindClass(className);
-    if(objClass!=NULL)
-    {
 
-        //注意，这种方式抛出的异常一般不会导致程序崩溃，因为该异常和jvm无关联，但是如果调用的java方法抛出的异常，有可能导致程序崩溃
-        env->ThrowNew(objClass,message);
-        if(0!=env->ExceptionOccurred())//检测是否有异常发生
-        {
-            env->ExceptionClear();//清除异常堆栈
-        }
-        env->DeleteLocalRef(objClass);
-    }
-    return;
-}
 

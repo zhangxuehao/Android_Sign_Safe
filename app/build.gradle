@@ -27,12 +27,12 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //minifyEnabled false
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.singleton
         }
         debug {
-            signingConfig signingConfigs.singleton
+//            signingConfig signingConfigs.singleton
         }
     }
     externalNativeBuild {
