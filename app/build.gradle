@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        singleton {
+            keyAlias 'haha'
+            keyPassword '123321'
+            storeFile file('key.jks')
+            storePassword '123321'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "23.0.3"
     defaultConfig {
@@ -13,6 +21,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
+                abiFilters "armeabi-v7a", "armeabi"
             }
         }
     }
@@ -20,6 +29,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.singleton
+        }
+        debug {
+            signingConfig signingConfigs.singleton
         }
     }
     externalNativeBuild {
@@ -30,7 +43,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
